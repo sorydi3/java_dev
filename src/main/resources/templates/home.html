@@ -10,12 +10,18 @@
     </head>
     <body class="p-3 mb-2 bg-light text-black">
         <div class="container">
+
+
             <div id="logoutDiv">
                 <form action="#" method="POST">
                     <button type="submit" class="btn btn-secondary float-right">Logout</button>
                 </form>
             </div>
+
+
             <div id="contentDiv" style="clear: right;">
+
+                //Nave bar
                 <nav style="clear: right;">
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <a class="nav-item nav-link active" id="nav-files-tab" data-toggle="tab" href="#nav-files" role="tab" aria-controls="nav-files" aria-selected="true">Files</a>
@@ -23,6 +29,8 @@
                         <a class="nav-item nav-link" id="nav-credentials-tab" data-toggle="tab" href="#nav-credentials" role="tab" aria-controls="nav-credentials" aria-selected="false">Credentials</a>
                     </div>
                 </nav>
+
+                //Nave content
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-files" role="tabpanel" aria-labelledby="nav-files-tab">
                         <form action="#" enctype="multipart/form-data" method="POST">
@@ -60,9 +68,13 @@
                             </table>
                         </div>
                     </div>
-                    
+
+
+
+
+                    // NOTES TAB STARTS HERE
                     <div class="tab-pane fade" id="nav-notes" role="tabpanel" aria-labelledby="nav-notes-tab">
-                        <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showNoteModal()">
+                        <button style="margin: 0.25em;" type="button" class="btn btn-info float-left" onclick="showNoteModal()">
                             + Add a New Note
                         </button>
 
@@ -70,24 +82,25 @@
                             <table class="table table-striped" id="userTable">
                                 <thead>
                                     <tr>
-                                        <th style="width: 20%" scope="col"></th>
+                                        <th style="width: 20%" scope="col">Actions</th>
                                         <th style="width: 20%" scope="col">Title</th>
                                         <th style="width: 60%" scope="col">Description</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    // Note rows go here (see below)
+                                    <tr th:each="note_ : ${notes}">
                                         <td>
-                                            <button type="button" class="btn btn-success">Edit</button>
-                                            <a class="btn btn-danger">Delete</a>
+                                            <button type="button" class="btn btn-success"  th:onclick="showNoteModal([[${note_.noteId}]],[[${note_.noteTitle}]],[[${note_.noteDescription}]]);">Edit</button>
+                                            <a class="btn btn-danger" th:href="@{'/note/delete/'+ ${note_.noteId}}">Delete</a>
                                         </td>
-                                        <th scope="row">Example Note Title</th>
-                                        <td>Example Note Description </td>
+                                        <th th:text="${note_.noteTitle}" scope="row">Example Note Title</th>
+                                        <td th:text="${note_.noteDescription}">Example Note Description </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-
+                        // Note Modal goes here (see below) 
                         <div class="modal fade" id="noteModal" tabindex="-1" role="dialog" aria-labelledby="noteModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
@@ -97,8 +110,10 @@
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
+
+                                    // Note Modal Form goes here (see below)
                                     <div class="modal-body">
-                                        <form action="#" method="POST">
+                                        <form action="#" method="POST" th:action="@{/note/add}">
                                             <input type="hidden" name="noteId" id="note-id">
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">Title</label>
@@ -119,6 +134,14 @@
                             </div>
                         </div>
                     </div>
+
+                    
+
+                    
+
+
+
+                    // CREDENTIALS TAB STARTS HERE
                     <div class="tab-pane fade" id="nav-credentials" role="tabpanel" aria-labelledby="nav-credentials-tab">
                         <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showCredentialModal()">
                             + Add a New Credential
