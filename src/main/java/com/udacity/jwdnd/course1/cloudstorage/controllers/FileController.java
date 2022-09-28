@@ -3,7 +3,6 @@ package com.udacity.jwdnd.course1.cloudstorage.controllers;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import org.apache.tomcat.util.http.parser.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;

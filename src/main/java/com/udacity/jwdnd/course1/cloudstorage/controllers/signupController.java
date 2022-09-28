@@ -1,7 +1,5 @@
 package com.udacity.jwdnd.course1.cloudstorage.controllers;
 
-import java.security.SecureRandom;
-import java.util.Base64;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,7 +9,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.udacity.jwdnd.course1.cloudstorage.entities.Credencial;
 import com.udacity.jwdnd.course1.cloudstorage.entities.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredencialService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
@@ -53,12 +50,5 @@ public class signupController {
         }
 
         return "signup";
-    }
-
-    private String getSalt() {
-        SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[16];
-        random.nextBytes(salt);
-        return Base64.getEncoder().encodeToString(salt);
     }
 }

@@ -7,7 +7,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
-import com.udacity.jwdnd.course1.cloudstorage.entities.Credencial;
 import com.udacity.jwdnd.course1.cloudstorage.entities.User;
 
 @Service
