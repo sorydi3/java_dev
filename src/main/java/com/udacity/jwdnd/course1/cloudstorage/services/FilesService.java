@@ -1,7 +1,10 @@
 package com.udacity.jwdnd.course1.cloudstorage.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.udacity.jwdnd.course1.cloudstorage.entities.File;
 import com.udacity.jwdnd.course1.cloudstorage.mappers.FileMapper;
@@ -21,7 +24,8 @@ public class FilesService {
      * @return user id  if file is added successfully
      */
     public int addFile(File file) {
-       return fileMapper.addFile(file);
+       
+        return fileMapper.addFile(file);
     }
 
 
@@ -40,6 +44,15 @@ public class FilesService {
      */
     public int deleteFile(Integer fileId) {
         return fileMapper.deleteFile(fileId);
+    }
+
+
+    public File getFileByName(String filename) {
+        return fileMapper.getFileByName(filename);
+    }
+
+    public List<File> getAllFiles(Integer userid) {
+        return fileMapper.getAllFiles(userid);
     }
 
 
