@@ -16,12 +16,11 @@ public class addUsersService {
 
    @PostConstruct()
     public void addUsers() {
-        User user = new User();
-        user.setFirstname("John");
-        user.setFirstname("Doe");
-        user.setUsername("ibradi3");
-        user.setPassword("1234");
-        //userService.addUser(user);
+
+       User user1 = new User(null, "ibradi3", null, "1234", "ibrahima", "diallo");
+       User user2 = new User(null, "sorydi3", null, "1234", "ibrahima", "diallo");
+        userService.addUser(user1);
+        userService.addUser(user2);
     }
 
 

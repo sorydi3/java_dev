@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Credencial {
-    private Integer credentialId;
+    private Integer credentialid;
     private String url;
     private String username;
     private String key;
@@ -12,7 +12,7 @@ public class Credencial {
     private Integer userid;
 
     public Credencial(Integer credentialId, String url, String username, String key, String password, Integer userId) {
-        this.credentialId = credentialId;
+        this.credentialid = credentialId;
         this.url = url;
         this.username = username;
         this.key = key;
@@ -20,7 +20,11 @@ public class Credencial {
         this.userid = userId;
     }
 
-    public Credencial() {
-        
+    @Override
+    public String toString() {
+        return "Credencial [credentialId=" + credentialid + ", url=" + url + ", userid=" + userid + ", username="
+                + username + "]";
     }
+
+  
 }

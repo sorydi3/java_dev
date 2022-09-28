@@ -27,12 +27,11 @@ public class AuthenticationService implements AuthenticationProvider {
         System.out.println("username: " + username);
         System.out.println("password: " + password);
 
-        Credencial credential = credencialService.getCredentialByUsername(username);
         User user = userService.getUser(username);
-        if (credential != null) {
+        if (user != null) {
             String salt = user.getSalt();
             String hashedPassword = hashService.getHashedValue(password, salt);
-            if (credential.getKey().equals(hashedPassword)) {
+            if (user.getPassword().equals(hashedPassword)) {
                 return new UsernamePasswordAuthenticationToken(username, password, null);
             }
 

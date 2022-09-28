@@ -39,15 +39,10 @@ public class signupController {
         }
 
         if (signupError == null) {
-            String encodedSalt = getSalt();
-            user.setSalt(encodedSalt);
             int rowsAdded = userService.addUser(user);
 
             if (rowsAdded < 0) {
                 signupError = "There was an error signing you up. Please try again.";
-            } else {
-                user.setUserid(rowsAdded);
-                credentialService.addCredencial(new Credencial(), encodedSalt, user);
             }
         }
 
