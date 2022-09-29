@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+
 import com.udacity.jwdnd.course1.cloudstorage.entities.Credencial;
 
 @Mapper
@@ -24,9 +26,8 @@ public interface CredentialMapper {
     @Options(useGeneratedKeys = true, keyProperty = "credentialId")
     int deleteCredential(Integer credentialId);
 
-    @Insert("UPDATE CREDENTIALS SET url = #{url}, username = #{username}, key = #{key}, password = #{password} WHERE credentialid = #{credentialId}")
-    @Options(useGeneratedKeys = true, keyProperty = "credentialId")
-    int updateCredential(Credencial credentialId);
+    @Update("UPDATE CREDENTIALS SET url = #{url}, username = #{username}, key = #{key}, password = #{password} WHERE credentialid = #{credentialid}")
+    int updateCredential(Credencial credential);
 
     @Select("SELECT * FROM CREDENTIALS WHERE username = #{username}")
     Credencial getCredentialByUsername(String username);

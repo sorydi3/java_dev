@@ -31,11 +31,13 @@ public class CredentialController {
         User loggeduser = userService.getUser(authentication.getName());
         Credencial cred = credencialService.getCredentialByUsername(credential.getUsername());
         int result = 0;
-        
         credential.setUserid(loggeduser.getUserid());
         if (cred != null) {
+            credential.setCredentialid(cred.getCredentialid());
+            System.out.println(credential);
             result = credencialService.updateCredencial(credential);
         } else {
+            
             result = credencialService.addCredencial(credential);
         }
 

@@ -58,6 +58,9 @@ public class CredencialService {
      */
 
     public int updateCredencial(Credencial credencial) {
+        String salt = getSalt();
+        String hashedPassword = hashService.getHashedValue(credencial.getPassword(), salt);
+        credencial.setKey(hashedPassword);
         return credentialMapper.updateCredential(credencial);
     }
 
