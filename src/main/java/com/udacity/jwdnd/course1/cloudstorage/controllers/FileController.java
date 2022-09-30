@@ -43,7 +43,7 @@ public class FileController {
         if (fileaux != null) {
             model.addAttribute("result", false);
             model.addAttribute("message", "File already exists");
-            return "result";
+            return "result";    
         } else {
             try {
                 newFile.setFilename(StringUtils.cleanPath(fileName));

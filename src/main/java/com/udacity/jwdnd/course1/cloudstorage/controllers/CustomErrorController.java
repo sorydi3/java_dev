@@ -23,8 +23,7 @@ public String handleError(HttpServletRequest request) {
         else if(statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
             return "error-500";
         }
-        
-        
+    }
     return "error";
 }
 
