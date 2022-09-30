@@ -12,14 +12,15 @@ import com.udacity.jwdnd.course1.cloudstorage.mappers.NoteMapper;
 public class    NotesService {
     @Autowired
     NoteMapper noteMapper;
-
+    
     /**
      * @param note
      * @return user id  if note is added successfully
      */
     public int addNote(Note note) {
+
        return noteMapper.addNote(note);
-    }
+    }   
 
 
     /**
@@ -28,6 +29,10 @@ public class    NotesService {
      */
     public Note getNoteById(Integer noteId) {
         return noteMapper.getNote(noteId);
+    }
+
+    public Integer updateNoteById(Note note) {
+        return noteMapper.updateNote(note);
     }
 
 

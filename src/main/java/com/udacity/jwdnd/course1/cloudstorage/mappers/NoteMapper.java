@@ -20,7 +20,6 @@ public interface NoteMapper {
 
 
     @Update ("UPDATE NOTES SET notetitle = #{noteTitle}, notedescription = #{noteDescription} WHERE noteid = #{noteId}")
-    @Options(useGeneratedKeys = true, keyProperty = "noteId")
     int updateNote (Note note);
 
     @Select ("SELECT * FROM NOTES WHERE noteid = #{noteId}")
@@ -28,7 +27,6 @@ public interface NoteMapper {
 
 
     @Delete ("DELETE FROM NOTES WHERE noteid = #{noteId}")
-    @Options(useGeneratedKeys = true, keyProperty = "noteId")
     int deleteNote (Integer noteId);
 
     @Select ("SELECT * FROM NOTES WHERE userid = #{userId}")

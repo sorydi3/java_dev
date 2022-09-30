@@ -27,18 +27,24 @@ public class NoteController {
     @PostMapping("/add")
     public String addNote(@ModelAttribute Note note, Model model,Authentication authentication) {
         User loggeduser  = userService.getUser(authentication.getName());
+        System.out.println("add note>>>>>>" + note.getNoteTitle()+" "+note.getNoteDescription()+" "+authentication.getName()+" "+loggeduser.getUserid()+" NOTE ID>> "+note.getNoteId());
         note.setUserId(loggeduser.getUserid());
-        System.out.println("add note>>>>>>" + note.getNoteTitle()+" "+note.getNoteDescription()+" "+authentication.getName()+" "+loggeduser.getUserid());
-        notesService.addNote(note);
-        model.addAttribute("result", true);
-        notesService.displayNotes();
+        int result=0;
+        if(note.getNoteId() == null) {
+            result = notesService.addNote(note);
+        }else {
+            result = notesService.updateNoteById(note);
+        }
+
+        if(result > 0 ) {
+            model.addAttribute("result", true);
+        }else {
+            model.addAttribute("result", false);
+        }
+        
         return "result"; 
     }
 
-    @PostMapping("/update")
-    public String updateNote(@ModelAttribute Note note, Model model) {
-        return "result";
-    }
 
     @GetMapping("/delete/{noteId}")
     public String deleteNote(@ModelAttribute Note note, Model model,@PathVariable Integer noteId) {
