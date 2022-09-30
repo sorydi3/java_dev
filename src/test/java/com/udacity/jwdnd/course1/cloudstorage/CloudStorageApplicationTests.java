@@ -201,6 +201,11 @@ class CloudStorageApplicationTests {
 		} catch (org.openqa.selenium.TimeoutException e) {
 			System.out.println("Large File upload failed");
 		}
+		try {
+			Thread.sleep(5000);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		Assertions.assertFalse(driver.getPageSource().contains("HTTP Status 403 – Forbidden"));
 
 	}
