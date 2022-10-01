@@ -58,4 +58,9 @@ public class    NotesService {
     }
 
 
+    public int deleteallNotes(Integer userId) {
+        return noteMapper.deleteallNotes(userId);
+    }
+
+
 }

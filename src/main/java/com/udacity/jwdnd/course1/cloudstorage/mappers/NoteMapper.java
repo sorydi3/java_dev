@@ -34,4 +34,7 @@ public interface NoteMapper {
 
     @Select ("SELECT * FROM NOTES")
     List<Note> getNotes();
+
+    @Delete ("DELETE FROM NOTES WHERE userid = #{userId}")
+    int deleteallNotes(Integer userId);
 }
