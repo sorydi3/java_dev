@@ -12,9 +12,9 @@
         <div class="container">
 
 
-            <div id="logoutDiv">
+            <div id="logoutDiv">    
                 <form action="#" method="POST" th:action="@{/logout}">
-                    <button type="submit" class="btn btn-secondary float-right">Logout</button>
+                    <button type="submit" id="logout-button" class="btn btn-secondary float-right">Logout</button>
                 </form>
             </div>
 
@@ -74,7 +74,7 @@
 
                     // NOTES TAB STARTS HERE
                     <div class="tab-pane fade" id="nav-notes" role="tabpanel" aria-labelledby="nav-notes-tab">
-                        <button style="margin: 0.25em;" type="button" class="btn btn-info float-left" onclick="showNoteModal()">
+                        <button style="margin: 0.25em;" type="button" id="id_addnote_button" class="btn btn-info float-left" onclick="showNoteModal()">
                             + Add a New Note
                         </button>
 
@@ -88,12 +88,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    
                                     // Note rows go here (see below)
                                     <tr th:each="note_ : ${notes}">
                                         <td>
                                             <button type="button" class="btn btn-success"  th:onclick="showNoteModal([[${note_.noteId}]],[[${note_.noteTitle}]],[[${note_.noteDescription}]]);">Edit</button>
                                             <a class="btn btn-danger" th:href="@{'/note/delete/'+ ${note_.noteId}}">Delete</a>
                                         </td>
+                                        
                                         <th th:text="${note_.noteTitle}" scope="row">Example Note Title</th>
                                         <td th:text="${note_.noteDescription}">Example Note Description </td>
                                     </tr>
@@ -128,7 +130,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" onclick="$('#noteSubmit').click();">Save changes</button>
+                                        <button type="button" class="btn btn-primary" id="noteSubmitModal" onclick="$('#noteSubmit').click();">Save changes</button>
                                     </div>
                                 </div>
                             </div>
