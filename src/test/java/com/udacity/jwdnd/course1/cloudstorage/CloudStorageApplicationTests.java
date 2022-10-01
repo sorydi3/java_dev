@@ -8,15 +8,37 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
+import com.udacity.jwdnd.course1.cloudstorage.entities.Note;
+import com.udacity.jwdnd.course1.cloudstorage.services.CredencialService;
+import com.udacity.jwdnd.course1.cloudstorage.services.FilesService;
+import com.udacity.jwdnd.course1.cloudstorage.services.NotesService;
+import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
+
+import static org.mockito.Mockito.reset;
+
 import java.io.File;
+import java.util.List;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CloudStorageApplicationTests {
 
+	@Autowired private NotesService notesService;
+
+	@Autowired private CredencialService credencialService;
+
+	@Autowired private FilesService filesService;
+
+	@Autowired private UserService userService;
+
+
+
 	@LocalServerPort
 	private int port;
+
+	private String baseURL;
 
 	private WebDriver driver;
 
@@ -27,7 +49,9 @@ class CloudStorageApplicationTests {
 
 	@BeforeEach
 	public void beforeEach() {
+		
 		this.driver = new ChromeDriver();
+		baseURL = "http://localhost:" + port;
 	}
 
 	@AfterEach
@@ -210,6 +234,171 @@ class CloudStorageApplicationTests {
 
 	}
 
+
+	@Test
+	public void testLogin() {
+		String username = "sorydi3";
+		String password = "1234";
+		driver.get(baseURL + "/login");
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.login(username, password);
+		Assertions.assertEquals(baseURL + "/home", driver.getCurrentUrl());
+	}
+
+	@Test
+	public void testLogout() {
+		String username = "sorydi3";
+		String password = "1234";
+		driver.get(baseURL + "/login");
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.login(username, password);
+		HomePage homePage = new HomePage(driver);
+		homePage.logout();
+		Assertions.assertEquals(baseURL + "/login", driver.getCurrentUrl());
+	}
+
+
+
+	@Test
+	public void testUnauthorizedAccess() {
+		driver.get(baseURL + "/home");
+		Assertions.assertEquals(baseURL + "/login", driver.getCurrentUrl());
+	}
+
+
+	@Test
+	public void testUnauthorizedAccessToNote() {
+		driver.get(baseURL + "/note");
+		Assertions.assertEquals(baseURL + "/login", driver.getCurrentUrl());
+	}
+
+	@Test
+	public void testUnauthorizedAccessToCredential() {
+		driver.get(baseURL + "/credential");
+		Assertions.assertEquals(baseURL + "/login", driver.getCurrentUrl());
+	}
+
+
+	@Test
+	public void testUnauthorizedAccessToNoteDelete() {
+		driver.get(baseURL + "/note/delete/1");
+		Assertions.assertEquals(baseURL + "/login", driver.getCurrentUrl());
+	}
+
+	@Test
+	public void testUnauthorizedAccessToCredentialDelete() {
+		driver.get(baseURL + "/credential/delete/1");
+		Assertions.assertEquals(baseURL + "/login", driver.getCurrentUrl());
+	}
+
+
+	@Test
+	public void testUnauthorizedAccessToNoteAdd() {
+		driver.get(baseURL + "/note/add");
+		Assertions.assertEquals(baseURL + "/login", driver.getCurrentUrl());
+	}
+
+	@Test
+	public void testSignup() {
+		String firstName = "Sory";
+		String lastName = "Diop";
+		String username = "sorydi";
+		String password = "1234";
+		driver.get(baseURL + "/signup");
+		SignupPage signupPage = new SignupPage(driver);
+		signupPage.signup(firstName, lastName, username, password);
+		Assertions.assertEquals(baseURL + "/login", driver.getCurrentUrl());
+	}
+
+	@Test
+	public void testSignupDuplicateUsername() {
+		String firstName = "Sory";
+		String lastName = "Diop";
+		String username = "sorydi3";
+		String password = "1234";
+		driver.get(baseURL + "/signup");
+		SignupPage signupPage = new SignupPage(driver);
+		signupPage.signup(firstName, lastName, username, password);
+		Assertions.assertEquals(baseURL + "/signup", driver.getCurrentUrl());
+	}
+
+
+	@Test
+	public void testGoToNote() {
+		String username = "sorydi3";
+		String password = "1234";
+		driver.get(baseURL + "/login");
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.login(username, password);
+		HomePage homePage = new HomePage(driver);
+		homePage.goToNotesTab();
+		NotePage notePage = new NotePage(driver);
+		Assertions.assertTrue(notePage.isAddNewNoteButtonDisplayed());
+	}
+
+	@Test
+	public void testNoteAdd() {
+		String username = "sorydi3";
+		String password = "1234";
+		String noteTitle = "Note Title";
+		String noteDescription = "Note Description";
+		driver.get(baseURL + "/login");
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.login(username, password);
+		HomePage homePage = new HomePage(driver);
+		homePage.goToNotesTab();
+		NotePage notePage = new NotePage(driver);
+		notesService.deleteallNotes(userService.getUser(username).getUserid());
+		notePage.addNewNote(noteTitle, noteDescription);
+		List<Note> notes = notesService.getNotesByUserId(userService.getUser(username).getUserid());
+		Assertions.assertEquals(1, notes.size());
+		ResultPage resultPage = new ResultPage(driver);
+		resultPage.goTohomePage();
+		homePage.goToNotesTab();
+		Assertions.assertEquals(noteTitle, notes.get(0).getNoteTitle());
+		Assertions.assertEquals(noteDescription, notes.get(0).getNoteDescription());
+		Assertions.assertEquals(driver.getPageSource().contains("Note Title"), true);
+		Assertions.assertEquals(driver.getPageSource().contains("Note Description"), true);		
+	}
+
+	@Test
+	public void testNoteEdit() {
+		String username = "sorydi3";
+		String password = "1234";
+		String noteTitle = "Note Title";
+		String noteDescription = "Note Description";
+		String noteTitleEdited = "Note Title Edited";
+		String noteDescriptionEdited = "Note Description Edited";
+		driver.get(baseURL + "/login");
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.login(username, password);
+		HomePage homePage = new HomePage(driver);
+		homePage.goToNotesTab();
+		NotePage notePage = new NotePage(driver);
+		notesService.deleteallNotes(userService.getUser(username).getUserid());
+		notePage.addNewNote(noteTitle, noteDescription);
+		List<Note> notes = notesService.getNotesByUserId(userService.getUser(username).getUserid());
+		Assertions.assertEquals(1, notes.size());
+		ResultPage resultPage = new ResultPage(driver);
+		resultPage.goTohomePage();
+		homePage.goToNotesTab();
+		notePage.editNoteTitle(noteTitleEdited);
+		resultPage.goTohomePage();
+		homePage.goToNotesTab();
+		notePage.editNoteDescription(noteDescriptionEdited);
+		resultPage.goTohomePage();
+		homePage.goToNotesTab();
+		notes = notesService.getNotesByUserId(userService.getUser(username).getUserid());
+		Assertions.assertEquals(noteTitleEdited, notes.get(0).getNoteTitle());
+		Assertions.assertEquals(noteDescriptionEdited, notes.get(0).getNoteDescription());
+		Assertions.assertEquals(driver.getPageSource().contains("Note Title Edited"), true);
+		Assertions.assertEquals(driver.getPageSource().contains("Note Description Edited"), true);
+	}
+
+
+
+
+	
 
 
 }
