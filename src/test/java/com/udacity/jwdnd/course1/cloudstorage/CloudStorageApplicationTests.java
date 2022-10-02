@@ -18,7 +18,6 @@ import com.udacity.jwdnd.course1.cloudstorage.services.FilesService;
 import com.udacity.jwdnd.course1.cloudstorage.services.NotesService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 
-import static org.mockito.Mockito.reset;
 
 import java.io.File;
 import java.util.List;
