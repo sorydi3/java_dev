@@ -27,7 +27,7 @@ public class NotePage {
     @FindBy(xpath = "//button[contains(text(),'Edit')]")
     private WebElement editNoteButton;
     
-    @FindBy(xpath = "//button[contains(text(),'Delete')]")
+    @FindBy(xpath = "//a[contains(text(),'Delete')]")
     private WebElement deleteNoteButton;
 
     @FindBy(id = "id_note_success")
@@ -60,7 +60,8 @@ public class NotePage {
     }
 
     public void deleteNote() {
-        deleteNoteButton.click();
+        WebElement result = new WebDriverWait(driver, 10).until(ExpectedConditions.elementToBeClickable(deleteNoteButton));
+        result.click();
     }
 
     public String getNoteSuccess() {

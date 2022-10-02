@@ -360,6 +360,7 @@ class CloudStorageApplicationTests {
 		Assertions.assertEquals(driver.getPageSource().contains("Note Description"), true);		
 	}
 
+
 	@Test
 	public void testNoteEdit() {
 		String username = "sorydi3";
@@ -395,9 +396,32 @@ class CloudStorageApplicationTests {
 	}
 
 
-
-
-	
-
+	@Test
+	public void testNoteDelete() {
+		String username = "sorydi3";
+		String password = "1234";
+		String noteTitle = "Note Title";
+		String noteDescription = "Note Description";
+		driver.get(baseURL + "/login");
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.login(username, password);
+		HomePage homePage = new HomePage(driver);
+		homePage.goToNotesTab();
+		NotePage notePage = new NotePage(driver);
+		notesService.deleteallNotes(userService.getUser(username).getUserid());
+		notePage.addNewNote(noteTitle, noteDescription);
+		List<Note> notes = notesService.getNotesByUserId(userService.getUser(username).getUserid());
+		Assertions.assertEquals(1, notes.size());
+		ResultPage resultPage = new ResultPage(driver);
+		resultPage.goTohomePage();
+		homePage.goToNotesTab();
+		notePage.deleteNote();
+		resultPage.goTohomePage();
+		homePage.goToNotesTab();
+		notes = notesService.getNotesByUserId(userService.getUser(username).getUserid());
+		Assertions.assertEquals(0, notes.size());
+		Assertions.assertEquals(driver.getPageSource().contains("Note Title"), false);
+		Assertions.assertEquals(driver.getPageSource().contains("Note Description"), false);
+	}
 
 }
