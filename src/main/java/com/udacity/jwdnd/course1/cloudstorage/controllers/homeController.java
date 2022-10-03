@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.udacity.jwdnd.course1.cloudstorage.entities.Credencial;
 import com.udacity.jwdnd.course1.cloudstorage.entities.File;
-import com.udacity.jwdnd.course1.cloudstorage.entities.Note;
 import com.udacity.jwdnd.course1.cloudstorage.entities.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredencialService;
 import com.udacity.jwdnd.course1.cloudstorage.services.FilesService;
