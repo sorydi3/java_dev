@@ -20,7 +20,7 @@
             </div>
             <div th:if="${!result}" class="alert alert-danger fill-parent">
                 <h1 class="display-5">Error</h1>
-                <span>Example Error Message</span>
+                <span>[[${message}]]</span>
                 <span>Click <a id="id_link_homePage" th:href="@{/home}">here</a> to continue.</span>
             </div>
         </div>
