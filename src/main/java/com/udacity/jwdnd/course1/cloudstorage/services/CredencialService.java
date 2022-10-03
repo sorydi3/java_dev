@@ -18,6 +18,8 @@ public class CredencialService {
     private CredentialMapper credentialMapper;
     @Autowired
     private HashService hashService;
+    @Autowired
+    private EncryptionService encryptionService;
 
     /**
      * @param credencial
@@ -25,13 +27,25 @@ public class CredencialService {
      */
 
     public int addCredencial(Credencial credencial) {
-       String salt = getSalt();
-       String hashedPassword = hashService.getHashedValue(credencial.getPassword(), salt);
-       credencial.setKey(hashedPassword);
+        SecureRandom random = new SecureRandom();
+        byte[] key = new byte[16];
+        random.nextBytes(key);
+        String encodedKey = Base64.getEncoder().encodeToString(key);
+        String hashedPassword = encryptPassword(credencial.getPassword(), encodedKey);
+        credencial.setKey(encodedKey);
+        credencial.setPassword(hashedPassword);
        return credentialMapper.addCredential(credencial);
     }
 
 
+    public String encryptPassword(String password, String key) {
+        return encryptionService.encryptValue(password, key);
+    }
+
+
+    public String decrypPassword(String encryptedPassword, String encodedKey) {
+        return encryptionService.decryptValue(encryptedPassword, encodedKey);
+    }
 
     /**
      * @param credencialId

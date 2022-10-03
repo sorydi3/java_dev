@@ -160,12 +160,18 @@
                                 <tbody>
                                 <tr th:each="cred : ${credentials}">
                                     <td>
-                                        <button type="button" class="btn btn-success" th:onclick="showCredentialModal([[${cred.credentialid}]],[[${cred.url}]],[[${cred.username}]],[[${cred.password}]])">Editt</button>
+                                        <script th:inline="javascript">
+                                            /*<![CDATA[*/
+                                           
+                                            /*]]>*/
+                                        </script>
+                                        <button type="button" class="btn btn-success" th:onclick="showCredentialModal([[${cred.credentialid}]],[[${cred.url}]],[[${cred.username}]],[[${passwords.get(cred.credentialid-1)}]],[[${cred.key}]])">Editt</button>
                                         <a class="btn btn-danger" th:href="@{'/credential/delete/' + ${cred.credentialid}}" >Deletee</a>
                                     </td>
+                                    
                                     <th scope="row" th:text="${cred.url}">Example Credential URL</th>
                                     <td th:text="${cred.username}">Example Credential Username</td>
-                                    <td th:text="${#strings.substring(cred.key,0,45)+'...'}">Example Credential Password</td>
+                                    <td th:text="${cred.password}">Example Credential Password</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -225,13 +231,35 @@
             }
 
             // For opening the credentials modal
-            function showCredentialModal(credentialId, url, username, password) {
+            function showCredentialModal(credentialId, url, username,password,key) {
                 $('#credential-id').val(credentialId ? credentialId : '');
                 $('#credential-url').val(url ? url : '');
                 $('#credential-username').val(username ? username : '');
                 $('#credential-password').val(password ? password : '');
                 $('#credentialModal').modal('show');
             }
+
+            // For decrypting the password
+            function decryptPassword(password,key,credentialId) {
+                var decryptedPassword = "";
+                var encryptedPassword = password;
+                var key = key;
+                var credentialId = credentialId;
+                $.ajax({
+                    type: "POST",
+                    url: "/credential/decrypt",
+                    data: {encryptedPassword: encryptedPassword, key: key, credentialId: credentialId},
+                    success: function (data) {
+                        decryptedPassword = data;
+                    },
+                    async: false
+                });
+                return decryptedPassword;
+            }
+        </script>
+
+        <script th:inline="javascript">
+
         </script>
     </body>
 </html>
