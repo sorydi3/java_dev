@@ -49,12 +49,8 @@ public class CredentialController {
 
     @GetMapping("/delete/{id}")
     public String deleteCredential(@PathVariable Integer id, Model model,Authentication authentication) {
-        User loggeduser = userService.getUser(authentication.getName());
-        List<Credencial> creds = credencialService.getAllCredencials(loggeduser.getUserid());
-        System.out.println("CREDENTIALS>>>>>>> BEFORE"+creds.size());
         credencialService.displayCredentials();
         int result = credencialService.deleteCredencial(id);
-        System.out.println("CREDENTIALS>>>>>>> AFTER"+creds.size()+">>>>>"+result);
         credencialService.displayCredentials();
         if (result < 0) {
             model.addAttribute("result", false);
