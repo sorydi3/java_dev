@@ -60,12 +60,13 @@ public class HomePage {
     }
 
     public void goToNotesTab() {
-        WebElement result = new WebDriverWait(driver, 10).until(ExpectedConditions.elementToBeClickable(notesTab));
+        WebElement result = new WebDriverWait(driver, 15).until(ExpectedConditions.elementToBeClickable(notesTab));
         result.click();
     }
 
     public void goToCredentialsTab() {
-        credentialsTab.click();
+        WebElement result = new WebDriverWait(driver, 15).until(ExpectedConditions.elementToBeClickable(credentialsTab));
+        result.click(); 
     }
 
     public String getFileSuccess() {

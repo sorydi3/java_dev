@@ -29,79 +29,34 @@ public class NotePage {
     
     @FindBy(xpath = "//a[contains(text(),'Delete')]")
     private WebElement deleteNoteButton;
-
-    @FindBy(id = "id_note_success")
-    private WebElement noteSuccess;
-
-    @FindBy(id = "id_note_error")
-    private WebElement noteError;
-
+    private int timeout = 15;
     // Constructor
     public NotePage(WebDriver webdriver) {
         this.driver =webdriver;
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        PageFactory.initElements(webdriver, this);
+        PageFactory.initElements(driver, this);
     }
 
     public void addNewNote(String title, String description) {
-        addNewNoteButton.click();
-        noteTitle.sendKeys(title);
-        noteDescription.sendKeys(description);
-        saveNoteButton.click();
+        addWait(addNewNoteButton, timeout).click();
+        addWait(noteTitle, timeout).sendKeys(title);
+        addWait(noteDescription, timeout).sendKeys(description);
+        addWait(saveNoteButton, timeout).click();
+        moveToNoteTab();
     }
 
     public void editNote(String title, String description) {
-        editNoteButton.click();
-        noteTitle.clear();
-        noteTitle.sendKeys(title);
-        noteDescription.clear();
-        noteDescription.sendKeys(description);
-        saveNoteButton.click();
+        addWait(editNoteButton,timeout).click();
+        addWait(noteTitle, timeout).clear();
+        addWait(noteTitle, timeout).sendKeys(title);
+        addWait(noteDescription, timeout).clear();
+        addWait(noteDescription, timeout).sendKeys(description);
+        addWait(saveNoteButton, timeout).click();
+        moveToNoteTab();
     }
 
     public void deleteNote() {
-        WebElement result = new WebDriverWait(driver, 10).until(ExpectedConditions.elementToBeClickable(deleteNoteButton));
-        result.click();
-    }
-
-    public String getNoteSuccess() {
-        return noteSuccess.getText();
-    }
-
-    public String getNoteError() {
-        return noteError.getText();
-    }
-
-    public String getNoteTitle() {
-        return noteTitle.getAttribute("value");
-    }
-
-    public String getNoteDescription() {
-        return noteDescription.getAttribute("value");
-    }
-
-    public boolean isNoteDisplayed() {
-        return noteTitle.isDisplayed();
-    }
-
-    public boolean isNoteTitleDisplayed() {
-        return noteTitle.isDisplayed();
-    }
-
-    public boolean isNoteDescriptionDisplayed() {
-        return noteDescription.isDisplayed();
-    }
-
-    public boolean isSaveNoteButtonDisplayed() {
-        return saveNoteButton.isDisplayed();
-    }
-
-    public boolean isEditNoteButtonDisplayed() {
-        return editNoteButton.isDisplayed();
-    }
-
-    public boolean isDeleteNoteButtonDisplayed() {
-        return deleteNoteButton.isDisplayed();
+        addWait(deleteNoteButton, timeout).click();
+        moveToNoteTab();
     }
 
     public boolean isAddNewNoteButtonDisplayed() {
@@ -110,17 +65,30 @@ public class NotePage {
     }
 
     public void editNoteTitle(String noteTitleEdited) {
-        editNoteButton.click();
-        noteTitle.clear();
-        noteTitle.sendKeys(noteTitleEdited);
-        saveNoteButton.click();
+        addWait(editNoteButton,timeout).click();
+        addWait(noteTitle, timeout).clear();;
+        addWait(noteTitle, timeout).sendKeys(noteTitleEdited);
+        addWait(saveNoteButton, timeout).click();
+        moveToNoteTab();
     }
 
     public void editNoteDescription(String noteDescriptionEdited) {
-        editNoteButton.click();
-        noteDescription.clear();
-        noteDescription.sendKeys(noteDescriptionEdited);
-        saveNoteButton.click();
+        addWait(editNoteButton,timeout).click();
+        addWait(noteDescription, timeout).clear();
+        addWait(noteDescription, timeout).sendKeys(noteDescriptionEdited);
+        addWait(saveNoteButton, timeout).click();
+        moveToNoteTab();
+    }
+
+    public WebElement addWait(WebElement element, int time) {
+        return new WebDriverWait(driver, time).until(ExpectedConditions.elementToBeClickable(element));
+    }
+
+    private void moveToNoteTab() {
+        ResultPage resultPage = new ResultPage(driver);
+        resultPage.goTohomePage();
+        HomePage homePage = new HomePage(driver);
+        homePage.goToNotesTab();
     }
 
 

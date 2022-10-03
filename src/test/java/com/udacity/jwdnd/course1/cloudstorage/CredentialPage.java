@@ -1,9 +1,12 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CredentialPage {
     @FindBy(id="credential-url")
@@ -15,74 +18,95 @@ public class CredentialPage {
     @FindBy(id="credential-password")
     private WebElement credentialPassword;
 
-    @FindBy(id="credential-add")
+    @FindBy(xpath ="//Button[contains(text(),'+ Add a New Credential')]")
     private WebElement credentialAdd;
 
-    @FindBy(id="credential-edit")
+    @FindBy(xpath ="//Button[contains(text(),'Editt')]")
     private WebElement credentialEdit;
 
-    @FindBy(id="credential-delete")
+    @FindBy(xpath ="//a[contains(text(),'Deletee')]")
     private WebElement credentialDelete;
 
-    @FindBy(id="credential-save")
+    @FindBy(id ="credSubmitModal")
     private WebElement credentialSave;
 
-    @FindBy(id="credential-success")
-    private WebElement credentialSuccess;
+    private WebDriver driver;
 
-    @FindBy(id="credential-error")
-    private WebElement credentialError;
-
-
+    private int timeout = 8;
     /*
      * Constructor
      */
     public CredentialPage(WebDriver webdriver) {
-        PageFactory.initElements(webdriver, this);
+        this.driver = webdriver;
+        PageFactory.initElements(driver, this);
     }
 
     public void addNewCredential(String url, String username, String password) {
-        credentialAdd.click();
-        credentialUrl.sendKeys(url);
-        credentialUsername.sendKeys(username);
-        credentialPassword.sendKeys(password);
-        credentialSave.click();
+        addWait(credentialAdd, timeout).click();
+        addWait(credentialUrl, timeout).sendKeys(url);
+        addWait(credentialUsername, timeout).sendKeys(username);
+        addWait(credentialPassword, timeout).sendKeys(password);
+        addWait(credentialSave, timeout).click();
+        moveToCredentialTab();
     }
 
     public void editCredential(String url, String username, String password) {
-        credentialEdit.click();
-        credentialUrl.clear();
-        credentialUrl.sendKeys(url);
-        credentialUsername.clear();
-        credentialUsername.sendKeys(username);
-        credentialPassword.clear();
-        credentialPassword.sendKeys(password);
-        credentialSave.click();
+        addWait(credentialEdit, timeout).click();
+        addWait(credentialUrl, timeout).clear();
+        addWait(credentialUrl, timeout).sendKeys(url);
+        addWait(credentialUsername, timeout).clear();
+        addWait(credentialUsername, timeout).sendKeys(username);
+        addWait(credentialPassword, timeout).clear();
+        addWait(credentialPassword, timeout).sendKeys(password);
+        addWait(credentialSave, timeout).click();
+        moveToCredentialTab();
+    }
+
+    public void clickEditCredential() {
+        addWait(credentialEdit, timeout).click();
+    }
+
+    public void clickAddCredential() {
+        addWait(credentialAdd, timeout).click();
     }
 
     public void deleteCredential() {
-        credentialDelete.click();
+        addWait(credentialDelete, timeout).click();
+        moveToCredentialTab();
     }
 
-    public String getCredentialSuccess() {
-        return credentialSuccess.getText();
+    public void editCredentialUrl(String credentialUrlEdited) {
+        addWait(credentialEdit, timeout).click();
+        addWait(credentialUrl, timeout).clear();
+        addWait(credentialUrl, timeout).sendKeys(credentialUrlEdited);
+        addWait(credentialSave, timeout).click();
+        moveToCredentialTab();
     }
 
-    public String getCredentialError() {
-        return credentialError.getText();
+    public void editCredentialUsername(String credentialUsernameEdited) {
+        addWait(credentialEdit, timeout).click();
+        addWait(credentialUsername, timeout).clear();
+        addWait(credentialUsername, timeout).sendKeys(credentialUsernameEdited);
+        addWait(credentialSave, timeout).click();
+        moveToCredentialTab();
     }
 
-    public String getCredentialUrl() {
-        return credentialUrl.getAttribute("value");
+    public void editCredentialPassword(String credentialPasswordEdited) {
+        addWait(credentialEdit, timeout).click();
+        addWait(credentialPassword, timeout).clear();
+        addWait(credentialPassword, timeout).sendKeys(credentialPasswordEdited);
+        addWait(credentialSave, timeout).click();
+        moveToCredentialTab();
     }
 
-    public String getCredentialUsername() {
-        return credentialUsername.getAttribute("value");
+    private void moveToCredentialTab() {
+        ResultPage resultPage = new ResultPage(driver);
+        resultPage.goTohomePage();
+        HomePage homePage = new HomePage(driver);
+        homePage.goToCredentialsTab();
     }
 
-    public String getCredentialPassword() {
-        return credentialPassword.getAttribute("value");
+    private WebElement addWait(WebElement element, int time) {
+        return new WebDriverWait(driver, time).until(ExpectedConditions.elementToBeClickable(element));
     }
-
-
 }
