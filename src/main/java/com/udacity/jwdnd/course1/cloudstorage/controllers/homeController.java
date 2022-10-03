@@ -36,7 +36,6 @@ public class homeController {
     @GetMapping()
     public String home(Model model, Authentication authentication) {
         User loggeduser = userService.getUser(authentication.getName());
-        List<Note> notes = notesService.getNotesByUserId(loggeduser.getUserid());
         model.addAttribute("notes", notesService.getNotesByUserId(loggeduser.getUserid()));
         List<Credencial> creds = credencialService.getAllCredencials(loggeduser.getUserid());
         model.addAttribute("credentials", creds);
