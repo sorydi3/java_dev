@@ -421,6 +421,22 @@ class CloudStorageApplicationTests {
 		Assertions.assertEquals(dataSource.contains("1234"), false);
 	}
 
+	@Test
+	public void testPasswordEncryption() {
+		helperLogin();
+		String credentialUrl = "www.google.com";
+		String credentialUsername = "sorydi3";
+		String credentialPassword = "1234";
+		HomePage homePage = new HomePage(driver);
+		homePage.goToCredentialsTab();
+		CredentialPage credentialPage = new CredentialPage(driver);
+		credencialService.deleteallCredentials(userService.getUser(username).getUserid());
+		credentialPage.addNewCredential(credentialUrl, credentialUsername, credentialPassword);
+		List<Credencial> credentials = credencialService.getAllCredencials(userService.getUser(username).getUserid());
+		Assertions.assertEquals(1, credentials.size());
+		Assertions.assertTrue(driver.getPageSource().contains(credentials.get(0).getPassword()));
+	}
+
 	// Test to create a note, edit it and delete it
 
 	@Test
