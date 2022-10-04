@@ -17,7 +17,7 @@ public class CredencialService {
     @Autowired
     private CredentialMapper credentialMapper;
     @Autowired
-    private HashService hashService;
+    private EncryptionService encryptionService;
 
     /**
      * @param credencial
@@ -25,13 +25,25 @@ public class CredencialService {
      */
 
     public int addCredencial(Credencial credencial) {
-       String salt = getSalt();
-       String hashedPassword = hashService.getHashedValue(credencial.getPassword(), salt);
-       credencial.setKey(hashedPassword);
+        SecureRandom random = new SecureRandom();
+        byte[] key = new byte[16];
+        random.nextBytes(key);
+        String encodedKey = Base64.getEncoder().encodeToString(key);
+        String hashedPassword = encryptPassword(credencial.getPassword(), encodedKey);
+        credencial.setKey(encodedKey);
+        credencial.setPassword(hashedPassword);
        return credentialMapper.addCredential(credencial);
     }
 
 
+    public String encryptPassword(String password, String key) {
+        return encryptionService.encryptValue(password, key);
+    }
+
+
+    public String decrypPassword(String encryptedPassword, String encodedKey) {
+        return encryptionService.decryptValue(encryptedPassword, encodedKey);
+    }
 
     /**
      * @param credencialId
@@ -47,7 +59,6 @@ public class CredencialService {
      * @return user id if credencial is deleted successfully
      */
     public int deleteCredencial(Integer credencialId) {
-        System.out.println("deleting credencialId: " + credencialId);
         return credentialMapper.deleteCredential(credencialId);
     }
 
@@ -58,9 +69,14 @@ public class CredencialService {
      */
 
     public int updateCredencial(Credencial credencial) {
-        String salt = getSalt();
-        String hashedPassword = hashService.getHashedValue(credencial.getPassword(), salt);
-        credencial.setKey(hashedPassword);
+        System.out.println(credencial);
+        SecureRandom random = new SecureRandom();
+        byte[] key = new byte[16];
+        random.nextBytes(key);
+        String encodedKey = Base64.getEncoder().encodeToString(key);
+        String hashedPassword = encryptPassword(credencial.getPassword(),encodedKey);
+        credencial.setPassword(hashedPassword);
+        credencial.setKey(encodedKey);
         return credentialMapper.updateCredential(credencial);
     }
 

@@ -17,7 +17,7 @@ public class HomePage {
     @FindBy(id = "nav-notes-tab")
     private WebElement notesTab;
 
-    @FindBy(id = "nav-credentials-tab")
+    @FindBy(xpath = "//a[contains(text(),'Credentials')]")
     private WebElement credentialsTab;
 
     @FindBy(id = "fileSuccess")
@@ -41,6 +41,7 @@ public class HomePage {
     private WebDriver driver;
 
     //constructor
+    private  int timeout = CloudStorageApplicationTests.TIMEOUT;
     public HomePage(WebDriver webdriver) {
         this.driver = webdriver;
         PageFactory.initElements(webdriver, this);
@@ -48,46 +49,23 @@ public class HomePage {
     
 
     public void logout() {
-        logoutButton.click();
-    }
-
-    public void gotoHomePage() {
-        filesTab.click();
+        addWait(logoutButton, timeout).click(); //logoutButton.click();
     }
 
     public void goToFilesTab() {
-        filesTab.click();
+        addWait(filesTab, timeout).click(); //filesTab.click();
     }
 
     public void goToNotesTab() {
-        WebElement result = new WebDriverWait(driver, 15).until(ExpectedConditions.elementToBeClickable(notesTab));
-        result.click();
+        addWait(notesTab, timeout).click(); 
     }
 
     public void goToCredentialsTab() {
-        WebElement result = new WebDriverWait(driver, 15).until(ExpectedConditions.elementToBeClickable(credentialsTab));
-        result.click(); 
+        addWait(credentialsTab, timeout).click(); 
     }
 
-    public String getFileSuccess() {
-        return fileSuccess.getText();
+    private WebElement addWait(WebElement element, int time) {
+        return new WebDriverWait(driver, time).until(ExpectedConditions.elementToBeClickable(element));
     }
 
-    public String getFileError() {
-        return fileError.getText();
-    }
-
-    public String getNoteSuccess() {
-        return noteSuccess.getText();
-    }
-
-
-    public String getNoteError() {
-        return noteError.getText();
-    }
-
-
-    public String getCredentialSuccess() {
-        return credentialSuccess.getText();
-    }
 }

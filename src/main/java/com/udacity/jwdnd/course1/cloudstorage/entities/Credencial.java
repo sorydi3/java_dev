@@ -10,11 +10,19 @@ public class Credencial {
     private String key;
     private String password;
     private Integer userid;
+
     @Override
     public String toString() {
-        return "Credencial [credentialid=" + credentialid + ", url=" + url + ", userid=" + userid + ", username="
-                + username + "]";
+        return "{" +
+            " credentialid='" + getCredentialid() + "'" +
+            ", url='" + getUrl() + "'" +
+            ", username='" + getUsername() + "'" +
+            ", key='" + getKey() + "'" +
+            ", password='" + getPassword() + "'" +
+            ", userid='" + getUserid() + "'" +
+            "}";
     }
+   
 
   
 }

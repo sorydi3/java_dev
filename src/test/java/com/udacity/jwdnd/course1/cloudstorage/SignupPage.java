@@ -43,7 +43,6 @@ public class SignupPage {
         submitButton.click();
     }
 
-
     public void login() {
         loginLink.click();
     }
