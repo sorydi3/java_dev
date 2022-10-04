@@ -21,7 +21,6 @@
 
             <div id="contentDiv" style="clear: right;">
 
-                //Nave bar
                 <nav style="clear: right;">
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <a class="nav-item nav-link active" id="nav-files-tab" data-toggle="tab" href="#nav-files" role="tab" aria-controls="nav-files" aria-selected="true">Files</a>
@@ -30,7 +29,6 @@
                     </div>
                 </nav>
 
-                //Nave content
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-files" role="tabpanel" aria-labelledby="nav-files-tab">
                         <form action="#" enctype="multipart/form-data" th:action="@{/file/add}" method="POST">
@@ -72,7 +70,6 @@
 
 
 
-                    // NOTES TAB STARTS HERE
                     <div class="tab-pane fade" id="nav-notes" role="tabpanel" aria-labelledby="nav-notes-tab">
                         <button style="margin: 0.25em;" type="button" id="id_addnote_button" class="btn btn-info float-left" onclick="showNoteModal()">
                             + Add a New Note
@@ -89,7 +86,6 @@
                                 </thead>
                                 <tbody>
                                     
-                                    // Note rows go here (see below)
                                     <tr th:each="note_ : ${notes}">
                                         <td>
                                             <button type="button" class="btn btn-success"  th:onclick="showNoteModal([[${note_.noteId}]],[[${note_.noteTitle}]],[[${note_.noteDescription}]]);">Edit</button>
@@ -102,7 +98,6 @@
                                 </tbody>
                             </table>
                         </div>
-                        // Note Modal goes here (see below) 
                         <div class="modal fade" id="noteModal" tabindex="-1" role="dialog" aria-labelledby="noteModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
@@ -113,7 +108,6 @@
                                         </button>
                                     </div>
 
-                                    // Note Modal Form goes here (see below)
                                     <div class="modal-body">
                                         <form action="#" method="POST" th:action="@{/note/add}">
                                             <input type="hidden" name="noteId" id="note-id">
@@ -143,7 +137,6 @@
 
 
 
-                    // CREDENTIALS TAB STARTS HERE
                     <div class="tab-pane fade" id="nav-credentials" role="tabpanel" aria-labelledby="nav-credentials-tab">
                         <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showCredentialModal()">+ Add a New Credential</button>
 

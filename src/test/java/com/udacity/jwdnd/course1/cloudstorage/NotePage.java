@@ -28,7 +28,7 @@ public class NotePage {
     
     @FindBy(xpath = "//a[contains(text(),'Delete')]")
     private WebElement deleteNoteButton;
-    private int timeout = 15;
+    private int timeout = CloudStorageApplicationTests.TIMEOUT;
     // Constructor
     public NotePage(WebDriver webdriver) {
         this.driver =webdriver;
@@ -59,24 +59,8 @@ public class NotePage {
     }
 
     public boolean isAddNewNoteButtonDisplayed() {
-        WebElement result = new WebDriverWait(driver, 10).until(ExpectedConditions.elementToBeClickable(addNewNoteButton));
+        WebElement result = new WebDriverWait(driver, CloudStorageApplicationTests.TIMEOUT).until(ExpectedConditions.elementToBeClickable(addNewNoteButton));
         return result.isDisplayed();
-    }
-
-    public void editNoteTitle(String noteTitleEdited) {
-        addWait(editNoteButton,timeout).click();
-        addWait(noteTitle, timeout).clear();;
-        addWait(noteTitle, timeout).sendKeys(noteTitleEdited);
-        addWait(saveNoteButton, timeout).click();
-        moveToNoteTab();
-    }
-
-    public void editNoteDescription(String noteDescriptionEdited) {
-        addWait(editNoteButton,timeout).click();
-        addWait(noteDescription, timeout).clear();
-        addWait(noteDescription, timeout).sendKeys(noteDescriptionEdited);
-        addWait(saveNoteButton, timeout).click();
-        moveToNoteTab();
     }
 
     public WebElement addWait(WebElement element, int time) {

@@ -15,25 +15,22 @@ import org.springframework.boot.web.server.LocalServerPort;
 import com.udacity.jwdnd.course1.cloudstorage.entities.Credencial;
 import com.udacity.jwdnd.course1.cloudstorage.entities.Note;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredencialService;
-import com.udacity.jwdnd.course1.cloudstorage.services.FilesService;
 import com.udacity.jwdnd.course1.cloudstorage.services.NotesService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 
 import java.io.File;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CloudStorageApplicationTests {
+
+	public static final int TIMEOUT = 15;
 
 	@Autowired
 	private NotesService notesService;
 
 	@Autowired
 	private CredencialService credencialService;
-
-	@Autowired
-	private FilesService filesService;
 
 	@Autowired
 	private UserService userService;
@@ -63,8 +60,8 @@ class CloudStorageApplicationTests {
 		this.driver = new ChromeDriver();
 		baseURL = "http://localhost:" + port;
 
-		//driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		//driver.manage().window().maximize();
+		// driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		// driver.manage().window().maximize();
 	}
 
 	@AfterEach
@@ -369,11 +366,9 @@ class CloudStorageApplicationTests {
 		Assertions.assertEquals(1, credentials.size());
 		Assertions.assertEquals(credentialUrl, credentials.get(0).getUrl());
 		Assertions.assertEquals(credentialUsername, credentials.get(0).getUsername());
-		Assertions.assertEquals(credentialPassword, credentials.get(0).getPassword());
-		//credentialPage.clickEditCredential();
-		Assertions.assertEquals(driver.getPageSource().contains("www.google.com"), true);
-		Assertions.assertEquals(driver.getPageSource().contains("sorydi3"), true);
-		Assertions.assertEquals(driver.getPageSource().contains("1234"), true);
+		Assertions.assertEquals(driver.getPageSource().contains(credentialUrl), true);
+		Assertions.assertEquals(driver.getPageSource().contains(credentialUsername), true);
+		Assertions.assertEquals(driver.getPageSource().contains(credentialPassword), true);
 	}
 
 	@Test
@@ -390,10 +385,8 @@ class CloudStorageApplicationTests {
 		CredentialPage credentialPage = new CredentialPage(driver);
 		credencialService.deleteallCredentials(userService.getUser(username).getUserid());
 		credentialPage.addNewCredential(credentialUrl, credentialUsername, credentialPassword);
-		credentialPage.editCredentialUrl(credentialUrlEdited);
-		credentialPage.editCredentialUsername(credentialUsernameEdited);
-		credentialPage.editCredentialPassword(credentialPasswordEdited);
-		//credentialPage.clickEditCredential();
+		credentialPage.editCredential(credentialUrlEdited, credentialUsernameEdited, credentialPasswordEdited);
+
 		Assertions.assertEquals(driver.getPageSource().contains(credentialUrlEdited), true);
 		Assertions.assertEquals(driver.getPageSource().contains(credentialUsernameEdited), true);
 		Assertions.assertEquals(driver.getPageSource().contains(credentialPasswordEdited), true);
@@ -412,13 +405,11 @@ class CloudStorageApplicationTests {
 		credentialPage.addNewCredential(credentialUrl, credentialUsername, credentialPassword);
 		List<Credencial> credentials = credencialService.getAllCredencials(userService.getUser(username).getUserid());
 		Assertions.assertEquals(1, credentials.size());
-
 		credentialPage.deleteCredential();
-
-		String dataSource =driver.getPageSource();
-		Assertions.assertEquals(dataSource.contains("www.google.com"), false);
-		Assertions.assertEquals(dataSource.contains("sorydi3"), false);
-		Assertions.assertEquals(dataSource.contains("1234"), false);
+		String dataSource = driver.getPageSource();
+		Assertions.assertEquals(dataSource.contains(credentialUrl), false);
+		Assertions.assertEquals(dataSource.contains(credentialUsername), false);
+		Assertions.assertEquals(dataSource.contains(credentialPassword), false);
 	}
 
 	@Test
@@ -469,15 +460,9 @@ class CloudStorageApplicationTests {
 		NotePage notePage = new NotePage(driver);
 		notesService.deleteallNotes(userService.getUser(username).getUserid());
 		notePage.addNewNote(noteTitle, noteDescription);
-		List<Note> notes = notesService.getNotesByUserId(userService.getUser(username).getUserid());
-		Assertions.assertEquals(1, notes.size());
-		notePage.editNoteTitle(noteTitleEdited);
-		notePage.editNoteDescription(noteDescriptionEdited);
-		notes = notesService.getNotesByUserId(userService.getUser(username).getUserid());
-		Assertions.assertEquals(noteTitleEdited, notes.get(0).getNoteTitle());
-		Assertions.assertEquals(noteDescriptionEdited, notes.get(0).getNoteDescription());
-		Assertions.assertEquals(driver.getPageSource().contains("Note Title Edited"), true);
-		Assertions.assertEquals(driver.getPageSource().contains("Note Description Edited"), true);
+		notePage.editNote(noteTitleEdited, noteDescriptionEdited);
+		Assertions.assertEquals(driver.getPageSource().contains(noteTitleEdited), true);
+		Assertions.assertEquals(driver.getPageSource().contains(noteDescriptionEdited), true);
 	}
 
 	@Test
@@ -495,8 +480,8 @@ class CloudStorageApplicationTests {
 		notePage.deleteNote();
 		notes = notesService.getNotesByUserId(userService.getUser(username).getUserid());
 		Assertions.assertEquals(0, notes.size());
-		Assertions.assertEquals(driver.getPageSource().contains("Note Title"), false);
-		Assertions.assertEquals(driver.getPageSource().contains("Note Description"), false);
+		Assertions.assertEquals(driver.getPageSource().contains(noteTitle), false);
+		Assertions.assertEquals(driver.getPageSource().contains(noteDescription), false);
 	}
 
 }

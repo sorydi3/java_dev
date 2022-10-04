@@ -34,7 +34,7 @@ public class ResultPage {
     }
 
     public void goTohomePage() {
-        WebElement result = new WebDriverWait(driver, 10).until(ExpectedConditions.elementToBeClickable(link_homePage));
+        WebElement result = new WebDriverWait(driver, CloudStorageApplicationTests.TIMEOUT).until(ExpectedConditions.elementToBeClickable(link_homePage));
         result.click();
     }
 
