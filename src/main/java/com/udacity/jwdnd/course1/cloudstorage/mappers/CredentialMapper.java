@@ -38,6 +38,10 @@ public interface CredentialMapper {
     @Select("SELECT * FROM CREDENTIALS")
     List<Credencial> getAlCredentials();
 
+    @Delete("DELETE FROM CREDENTIALS WHERE userid = #{userid}")
+    void deleteAllCredentials(Integer userid);
+
+
 
     
 }

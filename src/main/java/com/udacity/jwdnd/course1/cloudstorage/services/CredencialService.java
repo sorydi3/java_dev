@@ -116,4 +116,10 @@ public class CredencialService {
         return credentialMapper.getAlCredentials();
     }
 
+
+
+    public void deleteallCredentials(Integer userid) {
+        credentialMapper.deleteAllCredentials(userid);
+    }
+
 }
