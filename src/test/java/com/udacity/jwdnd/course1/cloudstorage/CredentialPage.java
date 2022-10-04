@@ -32,7 +32,7 @@ public class CredentialPage {
 
     private WebDriver driver;
 
-    private int timeout = 8;
+    private int timeout = CloudStorageApplicationTests.TIMEOUT;
     /*
      * Constructor
      */
@@ -72,30 +72,6 @@ public class CredentialPage {
 
     public void deleteCredential() {
         addWait(credentialDelete, timeout).click();
-        moveToCredentialTab();
-    }
-
-    public void editCredentialUrl(String credentialUrlEdited) {
-        addWait(credentialEdit, timeout).click();
-        addWait(credentialUrl, timeout).clear();
-        addWait(credentialUrl, timeout).sendKeys(credentialUrlEdited);
-        addWait(credentialSave, timeout).click();
-        moveToCredentialTab();
-    }
-
-    public void editCredentialUsername(String credentialUsernameEdited) {
-        addWait(credentialEdit, timeout).click();
-        addWait(credentialUsername, timeout).clear();
-        addWait(credentialUsername, timeout).sendKeys(credentialUsernameEdited);
-        addWait(credentialSave, timeout).click();
-        moveToCredentialTab();
-    }
-
-    public void editCredentialPassword(String credentialPasswordEdited) {
-        addWait(credentialEdit, timeout).click();
-        addWait(credentialPassword, timeout).clear();
-        addWait(credentialPassword, timeout).sendKeys(credentialPasswordEdited);
-        addWait(credentialSave, timeout).click();
         moveToCredentialTab();
     }
 
