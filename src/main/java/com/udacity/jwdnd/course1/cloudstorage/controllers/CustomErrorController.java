@@ -21,6 +21,7 @@ public String handleError(HttpServletRequest request) {
             return "error404";
         }
         else if(statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
+            System.out.println("heyyyyyy");
             return "error-500";
         }
     }
